@@ -41,6 +41,7 @@
     body {
       margin: 0;
       min-height: 100vh;
+
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -51,13 +52,17 @@
 
       background: var(--bg);
       color: var(--text);
+
       overflow-x: hidden;
     }
 
-    /* Aurora 背景 */
+    /* =========================
+       Aurora 背景
+       ========================= */
 
     .aurora {
       position: fixed;
+
       z-index: -1;
 
       top: -25%;
@@ -88,72 +93,114 @@
       filter: blur(65px);
 
       transform:
-        translate3d(0, var(--scroll-offset, 0px), 0);
+        translate3d(
+          0,
+          var(--scroll-offset, 0px),
+          0
+        );
 
-      animation: auroraFloat 18s ease-in-out infinite alternate;
+      animation:
+        auroraFloat
+        18s
+        ease-in-out
+        infinite
+        alternate;
     }
 
     @keyframes auroraFloat {
+
       from {
         transform:
-          translate3d(0, var(--scroll-offset, 0px), 0)
+          translate3d(
+            0,
+            var(--scroll-offset, 0px),
+            0
+          )
           scale(1);
       }
 
       to {
         transform:
-          translate3d(8px, var(--scroll-offset, 0px), 0)
+          translate3d(
+            8px,
+            var(--scroll-offset, 0px),
+            0
+          )
           scale(1.015);
       }
     }
 
-    /* 页面 */
+    /* =========================
+       页面
+       ========================= */
 
     .container {
       width: min(92%, 760px);
+
       margin: 0 auto;
-      padding: 55px 0 60px;
+
+      padding:
+        55px
+        0
+        60px;
     }
 
-    /* 标题 */
+    /* =========================
+       标题
+       ========================= */
 
     .title {
       text-align: center;
+
       margin-bottom: 12px;
     }
 
     .title h1 {
       margin: 0;
 
-      font-size: clamp(30px, 8vw, 48px);
+      font-size:
+        clamp(
+          30px,
+          8vw,
+          48px
+        );
+
       font-weight: 800;
+
       letter-spacing: -1px;
 
-      background: linear-gradient(
-        135deg,
-        #6366f1,
-        #8b5cf6,
-        #ec4899
-      );
+      background:
+        linear-gradient(
+          135deg,
+          #6366f1,
+          #8b5cf6,
+          #ec4899
+        );
 
       -webkit-background-clip: text;
       background-clip: text;
 
       color: transparent;
-      -webkit-text-fill-color: transparent;
+
+      -webkit-text-fill-color:
+        transparent;
     }
 
-    /* 防止书本 Emoji 被文字渐变覆盖 */
+    /* Emoji 保持原本颜色 */
 
     .book-icon {
       color: initial;
 
       background: none;
 
-      -webkit-background-clip: initial;
-      background-clip: initial;
+      -webkit-background-clip:
+        initial;
 
-      -webkit-text-fill-color: initial;
+      background-clip:
+        initial;
+
+      -webkit-text-fill-color:
+        initial;
 
       font-family:
         "Apple Color Emoji",
@@ -168,10 +215,13 @@
       text-align: center;
 
       font-size: 14px;
+
       color: var(--subtext);
     }
 
-    /* 卡片 */
+    /* =========================
+       玻璃卡片
+       ========================= */
 
     .card {
       margin-top: 30px;
@@ -182,21 +232,32 @@
 
       background: var(--card);
 
-      border: 1px solid var(--border);
+      border:
+        1px solid
+        var(--border);
 
       box-shadow:
-        0 20px 50px var(--shadow);
+        0 20px 50px
+        var(--shadow);
 
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
     }
 
-    /* 日期 */
+    /* =========================
+       日期
+       ========================= */
 
     .date {
       text-align: center;
 
-      margin: 4px 0 18px;
+      margin:
+        4px
+        0
+        18px;
 
       color: var(--subtext);
 
@@ -205,10 +266,13 @@
 
     .date strong {
       color: var(--text);
+
       font-weight: 600;
     }
 
-    /* 图片 */
+    /* =========================
+       图片
+       ========================= */
 
     .image-link {
       display: block;
@@ -217,7 +281,13 @@
 
       border-radius: 18px;
 
-      background: rgba(128, 128, 128, 0.08);
+      background:
+        rgba(
+          128,
+          128,
+          128,
+          0.08
+        );
 
       cursor: zoom-in;
     }
@@ -226,24 +296,40 @@
       display: block;
 
       width: 100%;
+
       height: auto;
 
       border-radius: 18px;
 
       transition:
-        transform 0.35s ease,
-        filter 0.35s ease;
+        transform
+        0.35s
+        ease,
+
+        filter
+        0.35s
+        ease;
     }
 
-    .image-link:hover .homework-image {
-      transform: scale(1.015);
-      filter: brightness(1.03);
+    .image-link:hover
+    .homework-image {
+
+      transform:
+        scale(1.015);
+
+      filter:
+        brightness(1.03);
     }
 
-    /* 提示 */
+    /* =========================
+       提示
+       ========================= */
 
     .tip {
-      margin: 16px 0 2px;
+      margin:
+        16px
+        0
+        2px;
 
       text-align: center;
 
@@ -252,7 +338,9 @@
       color: var(--subtext);
     }
 
-    /* 页脚 */
+    /* =========================
+       页脚
+       ========================= */
 
     footer {
       margin-top: 26px;
@@ -266,17 +354,21 @@
       opacity: 0.75;
     }
 
-    /* 手机 */
+    /* =========================
+       手机
+       ========================= */
 
     @media (max-width: 600px) {
 
       .container {
         width: 94%;
+
         padding-top: 35px;
       }
 
       .card {
         margin-top: 24px;
+
         padding: 10px;
 
         border-radius: 20px;
@@ -291,14 +383,21 @@
         font-size: 34px;
       }
     }
+
   </style>
 </head>
 
+
 <body>
+
+  <!-- Aurora 背景 -->
 
   <div class="aurora"></div>
 
+
   <main class="container">
+
+    <!-- 标题 -->
 
     <div class="title">
 
@@ -313,34 +412,46 @@
 
     </div>
 
+
+    <!-- 作业 -->
+
     <section class="card">
 
-      <div class="date" id="date">
+      <!-- 日期 -->
+
+      <div
+        class="date"
+        id="date"
+      >
         正在读取作业日期……
       </div>
+
+
+      <!-- 图片 -->
 
       <a
         class="image-link"
         id="imageLink"
-        href="homework.jpg"
+        href="#"
         target="_blank"
         rel="noopener noreferrer"
       >
 
         <img
-  id="homeworkImage"
-  class="homework-image"
-  src="https://cdn.jsdelivr.net/gh/cheems201/class-homework@main/homework.jpg"
-  alt="本周班级作业"
->
+          id="homeworkImage"
+          class="homework-image"
+          alt="本周班级作业"
+        >
 
       </a>
 
+
       <p class="tip">
-        点击图片查看原图
+        点击图片可以查看高清原图
       </p>
 
     </section>
+
 
     <footer>
       班级作业 · 自动更新
@@ -351,23 +462,81 @@
 
   <script>
 
-    /*
-     * GitHub 仓库
-     */
+    /* =====================================
+       GitHub 信息
+       ===================================== */
 
-    const USER = "cheems201";
-    const REPO = "class-homework";
-    const FILE = "homework.jpg";
+    const USER =
+      "cheems201";
+
+    const REPO =
+      "class-homework";
+
+    const FILE =
+      "homework.jpg";
 
 
-    /*
-     * 读取 GitHub 提交日期
-     */
+    /* =====================================
+       jsDelivr 图片地址
+       ===================================== */
+
+    const CDN_URL =
+      "https://cdn.jsdelivr.net/gh/" +
+      USER +
+      "/" +
+      REPO +
+      "@main/" +
+      FILE;
+
+
+    /* =====================================
+       加载图片
+       ===================================== */
+
+    function loadHomeworkImage() {
+
+      const image =
+        document.getElementById(
+          "homeworkImage"
+        );
+
+      const link =
+        document.getElementById(
+          "imageLink"
+        );
+
+
+      /*
+       * 加入时间参数，
+       * 防止浏览器继续使用旧缓存
+       */
+
+      const imageUrl =
+        CDN_URL +
+        "?v=" +
+        Date.now();
+
+
+      image.src =
+        imageUrl;
+
+      link.href =
+        imageUrl;
+
+    }
+
+
+    /* =====================================
+       获取作业日期
+       ===================================== */
 
     async function getHomeworkDate() {
 
       const dateElement =
-        document.getElementById("date");
+        document.getElementById(
+          "date"
+        );
+
 
       const api =
         "https://api.github.com/repos/" +
@@ -381,25 +550,24 @@
 
       try {
 
-        console.log("正在读取：", api);
-
         const response =
-          await fetch(api, {
-            cache: "no-store",
-            headers: {
-              "Accept": "application/vnd.github+json"
+          await fetch(
+            api,
+            {
+              cache: "no-store",
+
+              headers: {
+                "Accept":
+                  "application/vnd.github+json"
+              }
             }
-          });
+          );
 
-
-        /*
-         * 如果 API 返回错误
-         */
 
         if (!response.ok) {
 
           throw new Error(
-            "GitHub API 返回 HTTP " +
+            "GitHub API HTTP " +
             response.status
           );
 
@@ -410,34 +578,29 @@
           await response.json();
 
 
-        /*
-         * 没有提交记录
-         */
-
         if (
           !Array.isArray(data) ||
           data.length === 0
         ) {
 
           throw new Error(
-            "GitHub 没有找到 homework.jpg 的提交记录"
+            "没有找到 homework.jpg 的提交记录"
           );
 
         }
 
 
-        /*
-         * GitHub 提交日期
-         */
-
         const rawDate =
-          data[0]?.commit?.author?.date;
+          data[0]
+            ?.commit
+            ?.author
+            ?.date;
 
 
         if (!rawDate) {
 
           throw new Error(
-            "GitHub 返回的数据中没有日期"
+            "GitHub 返回的数据没有日期"
           );
 
         }
@@ -447,18 +610,18 @@
           new Date(rawDate);
 
 
-        if (isNaN(date.getTime())) {
+        if (
+          isNaN(
+            date.getTime()
+          )
+        ) {
 
           throw new Error(
-            "日期格式无法解析"
+            "日期格式错误"
           );
 
         }
 
-
-        /*
-         * 星期
-         */
 
         const weekDays = [
           "星期日",
@@ -481,12 +644,10 @@
           date.getDate();
 
         const weekDay =
-          weekDays[date.getDay()];
+          weekDays[
+            date.getDay()
+          ];
 
-
-        /*
-         * 显示
-         */
 
         dateElement.innerHTML =
           "作业日期：<strong>" +
@@ -503,15 +664,10 @@
       } catch (error) {
 
         console.error(
-          "读取作业日期失败：",
+          "日期读取失败:",
           error
         );
 
-
-        /*
-         * 把真正的错误显示出来，
-         * 方便我们下一步定位
-         */
 
         dateElement.innerHTML =
           "日期读取失败：" +
@@ -524,37 +680,16 @@
     }
 
 
-    /*
-     * 防止旧图片缓存
-     */
-
-    function refreshImage() {
-
-  const image =
-    document.getElementById("homeworkImage");
-
-  const link =
-    document.getElementById("imageLink");
-
-  const url =
-    "https://cdn.jsdelivr.net/gh/cheems201/class-homework@main/homework.jpg?v=" +
-    Date.now();
-
-  image.src = url;
-
-  link.href = url;
-    }
-
-
-    /*
-     * Aurora 滚动效果
-     */
+    /* =====================================
+       Aurora 滚动
+       ===================================== */
 
     let ticking = false;
 
 
     window.addEventListener(
       "scroll",
+
       function () {
 
         if (ticking) {
@@ -576,7 +711,8 @@
               );
 
 
-            document.documentElement.style
+            document.documentElement
+              .style
               .setProperty(
                 "--scroll-offset",
                 offset + "px"
@@ -592,17 +728,18 @@
         ticking = true;
 
       },
+
       {
         passive: true
       }
     );
 
 
-    /*
-     * 启动
-     */
+    /* =====================================
+       页面启动
+       ===================================== */
 
-    refreshImage();
+    loadHomeworkImage();
 
     getHomeworkDate();
 
