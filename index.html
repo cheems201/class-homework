@@ -51,13 +51,10 @@
 
       background: var(--bg);
       color: var(--text);
-
       overflow-x: hidden;
     }
 
-    /* =========================
-       Aurora 背景
-       ========================= */
+    /* Aurora 背景 */
 
     .aurora {
       position: fixed;
@@ -65,6 +62,7 @@
 
       top: -25%;
       left: -25%;
+
       width: 150%;
       height: 150%;
 
@@ -109,9 +107,7 @@
       }
     }
 
-    /* =========================
-       页面主体
-       ========================= */
+    /* 页面 */
 
     .container {
       width: min(92%, 760px);
@@ -119,9 +115,7 @@
       padding: 55px 0 60px;
     }
 
-    /* =========================
-       标题
-       ========================= */
+    /* 标题 */
 
     .title {
       text-align: center;
@@ -149,15 +143,13 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* 
-       单独把 Emoji 从文字渐变里拿出来，
-       防止 📚 变成和文字一样的颜色
-    */
+    /* 防止书本 Emoji 被文字渐变覆盖 */
 
     .book-icon {
       color: initial;
 
       background: none;
+
       -webkit-background-clip: initial;
       background-clip: initial;
 
@@ -179,9 +171,7 @@
       color: var(--subtext);
     }
 
-    /* =========================
-       玻璃卡片
-       ========================= */
+    /* 卡片 */
 
     .card {
       margin-top: 30px;
@@ -201,9 +191,7 @@
       -webkit-backdrop-filter: blur(18px);
     }
 
-    /* =========================
-       日期
-       ========================= */
+    /* 日期 */
 
     .date {
       text-align: center;
@@ -220,9 +208,7 @@
       font-weight: 600;
     }
 
-    /* =========================
-       图片
-       ========================= */
+    /* 图片 */
 
     .image-link {
       display: block;
@@ -254,9 +240,7 @@
       filter: brightness(1.03);
     }
 
-    /* =========================
-       图片下面提示
-       ========================= */
+    /* 提示 */
 
     .tip {
       margin: 16px 0 2px;
@@ -268,9 +252,7 @@
       color: var(--subtext);
     }
 
-    /* =========================
-       页脚
-       ========================= */
+    /* 页脚 */
 
     footer {
       margin-top: 26px;
@@ -284,11 +266,10 @@
       opacity: 0.75;
     }
 
-    /* =========================
-       手机优化
-       ========================= */
+    /* 手机 */
 
     @media (max-width: 600px) {
+
       .container {
         width: 94%;
         padding-top: 35px;
@@ -315,13 +296,12 @@
 
 <body>
 
-  <!-- Aurora 背景 -->
   <div class="aurora"></div>
 
   <main class="container">
 
-    <!-- 标题 -->
     <div class="title">
+
       <h1>
         <span class="book-icon">📚</span>
         班级作业
@@ -330,29 +310,30 @@
       <p class="subtitle">
         每周作业 · 点击图片查看原图
       </p>
+
     </div>
 
-    <!-- 作业卡片 -->
     <section class="card">
 
-      <!-- 日期 -->
       <div class="date" id="date">
         正在读取作业日期……
       </div>
 
-      <!-- 作业图片 -->
       <a
         class="image-link"
+        id="imageLink"
         href="homework.jpg"
         target="_blank"
         rel="noopener noreferrer"
       >
+
         <img
           id="homeworkImage"
           class="homework-image"
           src="homework.jpg"
           alt="本周班级作业"
         >
+
       </a>
 
       <p class="tip">
@@ -367,53 +348,117 @@
 
   </main>
 
+
   <script>
-    /* =====================================
-       GitHub 仓库信息
-       ===================================== */
 
-    const GITHUB_USER = "cheems201";
-    const GITHUB_REPO = "class-homework";
-    const IMAGE_FILE = "homework.jpg";
+    /*
+     * GitHub 仓库
+     */
+
+    const USER = "cheems201";
+    const REPO = "class-homework";
+    const FILE = "homework.jpg";
 
 
-    /* =====================================
-       自动读取 homework.jpg 最近一次提交日期
-       ===================================== */
+    /*
+     * 读取 GitHub 提交日期
+     */
 
-    async function loadHomeworkDate() {
+    async function getHomeworkDate() {
 
-      const dateElement = document.getElementById("date");
+      const dateElement =
+        document.getElementById("date");
 
-      const apiUrl =
-        `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/commits` +
-        `?path=${encodeURIComponent(IMAGE_FILE)}&per_page=1`;
+      const api =
+        "https://api.github.com/repos/" +
+        USER +
+        "/" +
+        REPO +
+        "/commits?path=" +
+        encodeURIComponent(FILE) +
+        "&per_page=1";
+
 
       try {
 
-        const response = await fetch(apiUrl, {
-          cache: "no-store"
-        });
+        console.log("正在读取：", api);
+
+        const response =
+          await fetch(api, {
+            cache: "no-store",
+            headers: {
+              "Accept": "application/vnd.github+json"
+            }
+          });
+
+
+        /*
+         * 如果 API 返回错误
+         */
 
         if (!response.ok) {
-          throw new Error("GitHub API 请求失败");
+
+          throw new Error(
+            "GitHub API 返回 HTTP " +
+            response.status
+          );
+
         }
 
-        const commits = await response.json();
 
-        if (!Array.isArray(commits) || commits.length === 0) {
-          throw new Error("没有找到图片提交记录");
+        const data =
+          await response.json();
+
+
+        /*
+         * 没有提交记录
+         */
+
+        if (
+          !Array.isArray(data) ||
+          data.length === 0
+        ) {
+
+          throw new Error(
+            "GitHub 没有找到 homework.jpg 的提交记录"
+          );
+
         }
 
-        const commitDate =
-          commits[0].commit.author.date ||
-          commits[0].commit.committer.date;
 
-        const date = new Date(commitDate);
+        /*
+         * GitHub 提交日期
+         */
+
+        const rawDate =
+          data[0]?.commit?.author?.date;
+
+
+        if (!rawDate) {
+
+          throw new Error(
+            "GitHub 返回的数据中没有日期"
+          );
+
+        }
+
+
+        const date =
+          new Date(rawDate);
+
 
         if (isNaN(date.getTime())) {
-          throw new Error("日期格式错误");
+
+          throw new Error(
+            "日期格式无法解析"
+          );
+
         }
+
+
+        /*
+         * 星期
+         */
 
         const weekDays = [
           "星期日",
@@ -425,99 +470,148 @@
           "星期六"
         ];
 
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const weekDay = weekDays[date.getDay()];
+
+        const year =
+          date.getFullYear();
+
+        const month =
+          date.getMonth() + 1;
+
+        const day =
+          date.getDate();
+
+        const weekDay =
+          weekDays[date.getDay()];
+
+
+        /*
+         * 显示
+         */
 
         dateElement.innerHTML =
-          `作业日期：<strong>${year}年${month}月${day}日 ${weekDay}</strong>`;
+          "作业日期：<strong>" +
+          year +
+          "年" +
+          month +
+          "月" +
+          day +
+          "日 " +
+          weekDay +
+          "</strong>";
+
 
       } catch (error) {
 
-        console.error("读取作业日期失败：", error);
+        console.error(
+          "读取作业日期失败：",
+          error
+        );
 
-        dateElement.textContent =
-          "作业日期暂时无法读取";
+
+        /*
+         * 把真正的错误显示出来，
+         * 方便我们下一步定位
+         */
+
+        dateElement.innerHTML =
+          "日期读取失败：" +
+          "<strong>" +
+          error.message +
+          "</strong>";
+
       }
+
     }
 
 
-    /* =====================================
-       防止 GitHub Pages 缓存旧图片
-       ===================================== */
+    /*
+     * 防止旧图片缓存
+     */
 
-    function refreshHomeworkImage() {
+    function refreshImage() {
 
       const image =
-        document.getElementById("homeworkImage");
+        document.getElementById(
+          "homeworkImage"
+        );
 
-      const imageLink =
-        document.querySelector(".image-link");
+      const link =
+        document.getElementById(
+          "imageLink"
+        );
 
-      const cacheBuster =
+
+      const url =
+        "homework.jpg?v=" +
         Date.now();
 
-      const newImageUrl =
-        `homework.jpg?v=${cacheBuster}`;
 
-      image.src = newImageUrl;
+      image.src = url;
 
-      imageLink.href = newImageUrl;
+      link.href = url;
+
     }
 
 
-    /* =====================================
-       Aurora 随页面滚动轻微移动
-       ===================================== */
+    /*
+     * Aurora 滚动效果
+     */
 
     let ticking = false;
 
-    function updateAurora() {
-
-      const scrollY = window.scrollY || 0;
-
-      /*
-        控制移动幅度非常小，
-        最大大约只有十几像素
-      */
-
-      const offset =
-        Math.min(scrollY * 0.06, 18);
-
-      document.documentElement.style
-        .setProperty(
-          "--scroll-offset",
-          `${offset}px`
-        );
-
-      ticking = false;
-    }
 
     window.addEventListener(
       "scroll",
-      () => {
+      function () {
 
-        if (!ticking) {
-
-          window.requestAnimationFrame(
-            updateAurora
-          );
-
-          ticking = true;
+        if (ticking) {
+          return;
         }
 
+
+        window.requestAnimationFrame(
+          function () {
+
+            const scrollY =
+              window.scrollY || 0;
+
+
+            const offset =
+              Math.min(
+                scrollY * 0.06,
+                18
+              );
+
+
+            document.documentElement.style
+              .setProperty(
+                "--scroll-offset",
+                offset + "px"
+              );
+
+
+            ticking = false;
+
+          }
+        );
+
+
+        ticking = true;
+
       },
-      { passive: true }
+      {
+        passive: true
+      }
     );
 
 
-    /* =====================================
-       页面加载
-       ===================================== */
+    /*
+     * 启动
+     */
 
-    loadHomeworkDate();
-    refreshHomeworkImage();
+    refreshImage();
+
+    getHomeworkDate();
 
   </script>
 
