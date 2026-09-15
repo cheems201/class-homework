@@ -328,16 +328,16 @@
       >
 
         <img
-          id="homeworkImage"
-          class="homework-image"
-          src="homework.jpg"
-          alt="本周班级作业"
-        >
+  id="homeworkImage"
+  class="homework-image"
+  src="https://cdn.jsdelivr.net/gh/cheems201/class-homework@main/homework.jpg"
+  alt="本周班级作业"
+>
 
       </a>
 
       <p class="tip">
-        点击图片可以查看高清原图
+        点击图片查看原图
       </p>
 
     </section>
@@ -530,26 +530,19 @@
 
     function refreshImage() {
 
-      const image =
-        document.getElementById(
-          "homeworkImage"
-        );
+  const image =
+    document.getElementById("homeworkImage");
 
-      const link =
-        document.getElementById(
-          "imageLink"
-        );
+  const link =
+    document.getElementById("imageLink");
 
+  const url =
+    "https://cdn.jsdelivr.net/gh/cheems201/class-homework@main/homework.jpg?v=" +
+    Date.now();
 
-      const url =
-        "homework.jpg?v=" +
-        Date.now();
+  image.src = url;
 
-
-      image.src = url;
-
-      link.href = url;
-
+  link.href = url;
     }
 
 
