@@ -1,749 +1,441 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>班级作业</title>
-
-  <style>
-    :root {
-      color-scheme: light dark;
-
-      --bg: #f5f7fb;
-      --text: #1f2937;
-      --subtext: #6b7280;
-      --card: rgba(255, 255, 255, 0.62);
-      --border: rgba(255, 255, 255, 0.75);
-      --shadow: rgba(31, 41, 55, 0.12);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0f1117;
-        --text: #f3f4f6;
-        --subtext: #9ca3af;
-        --card: rgba(25, 28, 38, 0.65);
-        --border: rgba(255, 255, 255, 0.10);
-        --shadow: rgba(0, 0, 0, 0.35);
-      }
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        "PingFang SC",
-        "Microsoft YaHei",
-        sans-serif;
-
-      background: var(--bg);
-      color: var(--text);
-
-      overflow-x: hidden;
-    }
-
-    /* =========================
-       Aurora 背景
-       ========================= */
-
-    .aurora {
-      position: fixed;
-
-      z-index: -1;
-
-      top: -25%;
-      left: -25%;
-
-      width: 150%;
-      height: 150%;
-
-      pointer-events: none;
-
-      background:
-        radial-gradient(
-          circle at 20% 25%,
-          rgba(99, 102, 241, 0.10),
-          transparent 32%
-        ),
-        radial-gradient(
-          circle at 80% 30%,
-          rgba(168, 85, 247, 0.08),
-          transparent 30%
-        ),
-        radial-gradient(
-          circle at 50% 80%,
-          rgba(59, 130, 246, 0.07),
-          transparent 35%
-        );
-
-      filter: blur(65px);
-
-      transform:
-        translate3d(
-          0,
-          var(--scroll-offset, 0px),
-          0
-        );
-
-      animation:
-        auroraFloat
-        18s
-        ease-in-out
-        infinite
-        alternate;
-    }
-
-    @keyframes auroraFloat {
-
-      from {
-        transform:
-          translate3d(
-            0,
-            var(--scroll-offset, 0px),
-            0
-          )
-          scale(1);
-      }
-
-      to {
-        transform:
-          translate3d(
-            8px,
-            var(--scroll-offset, 0px),
-            0
-          )
-          scale(1.015);
-      }
-    }
-
-    /* =========================
-       页面
-       ========================= */
-
-    .container {
-      width: min(92%, 760px);
-
-      margin: 0 auto;
-
-      padding:
-        55px
-        0
-        60px;
-    }
-
-    /* =========================
-       标题
-       ========================= */
-
-    .title {
-      text-align: center;
-
-      margin-bottom: 12px;
-    }
-
-    .title h1 {
-      margin: 0;
-
-      font-size:
-        clamp(
-          30px,
-          8vw,
-          48px
-        );
-
-      font-weight: 800;
-
-      letter-spacing: -1px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #6366f1,
-          #8b5cf6,
-          #ec4899
-        );
-
-      -webkit-background-clip: text;
-      background-clip: text;
-
-      color: transparent;
-
-      -webkit-text-fill-color:
-        transparent;
-    }
-
-    /* Emoji 保持原本颜色 */
-
-    .book-icon {
-      color: initial;
-
-      background: none;
-
-      -webkit-background-clip:
-        initial;
-
-      background-clip:
-        initial;
-
-      -webkit-text-fill-color:
-        initial;
-
-      font-family:
-        "Apple Color Emoji",
-        "Segoe UI Emoji",
-        "Noto Color Emoji",
-        sans-serif;
-    }
-
-    .subtitle {
-      margin: 0;
-
-      text-align: center;
-
-      font-size: 14px;
-
-      color: var(--subtext);
-    }
-
-    /* =========================
-       玻璃卡片
-       ========================= */
-
-    .card {
-      margin-top: 30px;
-
-      padding: 16px;
-
-      border-radius: 24px;
-
-      background: var(--card);
-
-      border:
-        1px solid
-        var(--border);
-
-      box-shadow:
-        0 20px 50px
-        var(--shadow);
-
-      backdrop-filter:
-        blur(18px);
-
-      -webkit-backdrop-filter:
-        blur(18px);
-    }
-
-    /* =========================
-       日期
-       ========================= */
-
-    .date {
-      text-align: center;
-
-      margin:
-        4px
-        0
-        18px;
-
-      color: var(--subtext);
-
-      font-size: 14px;
-    }
-
-    .date strong {
-      color: var(--text);
-
-      font-weight: 600;
-    }
-
-    /* =========================
-       图片
-       ========================= */
-
-    .image-link {
-      display: block;
-
-      overflow: hidden;
-
-      border-radius: 18px;
-
-      background:
-        rgba(
-          128,
-          128,
-          128,
-          0.08
-        );
-
-      cursor: zoom-in;
-    }
-
-    .homework-image {
-      display: block;
-
-      width: 100%;
-
-      height: auto;
-
-      border-radius: 18px;
-
-      transition:
-        transform
-        0.35s
-        ease,
-
-        filter
-        0.35s
-        ease;
-    }
-
-    .image-link:hover
-    .homework-image {
-
-      transform:
-        scale(1.015);
-
-      filter:
-        brightness(1.03);
-    }
-
-    /* =========================
-       提示
-       ========================= */
-
-    .tip {
-      margin:
-        16px
-        0
-        2px;
-
-      text-align: center;
-
-      font-size: 13px;
-
-      color: var(--subtext);
-    }
-
-    /* =========================
-       页脚
-       ========================= */
-
-    footer {
-      margin-top: 26px;
-
-      text-align: center;
-
-      font-size: 12px;
-
-      color: var(--subtext);
-
-      opacity: 0.75;
-    }
-
-    /* =========================
-       手机
-       ========================= */
-
-    @media (max-width: 600px) {
-
-      .container {
-        width: 94%;
-
-        padding-top: 35px;
-      }
-
-      .card {
-        margin-top: 24px;
-
-        padding: 10px;
-
-        border-radius: 20px;
-      }
-
-      .image-link,
-      .homework-image {
-        border-radius: 15px;
-      }
-
-      .title h1 {
-        font-size: 34px;
-      }
-    }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>班级作业</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif;
+
+  background:
+    radial-gradient(circle at 20% 20%, rgba(120, 170, 255, .28), transparent 32%),
+    radial-gradient(circle at 80% 30%, rgba(190, 120, 255, .25), transparent 30%),
+    radial-gradient(circle at 50% 90%, rgba(80, 210, 190, .18), transparent 35%),
+    #f4f7ff;
+
+  color: #202331;
+  transition: background .4s ease, color .4s ease;
+  overflow-x: hidden;
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+  body {
+    background:
+      radial-gradient(circle at 20% 20%, rgba(80, 130, 255, .22), transparent 32%),
+      radial-gradient(circle at 80% 30%, rgba(170, 90, 255, .20), transparent 30%),
+      radial-gradient(circle at 50% 90%, rgba(40, 190, 170, .13), transparent 35%),
+      #0d1018;
+
+    color: #f2f4ff;
+  }
+
+  .card {
+    background: rgba(25, 29, 42, .68);
+    border-color: rgba(255,255,255,.10);
+  }
+
+  .date {
+    color: #b9bfd4;
+  }
+
+  .hint {
+    color: #969db5;
+  }
+}
+
+/* Aurora 光晕 */
+.aurora {
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: .25;
+  pointer-events: none;
+  z-index: -1;
+
+  left: 50%;
+  top: 35%;
+  transform:
+    translate(
+      calc(-50% + var(--move-x, 0px)),
+      calc(-50% + var(--move-y, 0px))
+    );
+
+  transition: transform .8s ease-out;
+}
+
+/* 主容器 */
+.container {
+  width: min(92%, 760px);
+  margin: 0 auto;
+  padding: 70px 0 80px;
+}
+
+/* 标题 */
+header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(38px, 8vw, 64px);
+  font-weight: 800;
+  letter-spacing: -2px;
+
+  background: linear-gradient(
+    120deg,
+    #5b7cff,
+    #a45cff,
+    #e55cff
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Emoji 不跟随文字渐变 */
+.book-icon {
+  color: initial;
+  -webkit-text-fill-color: initial;
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+}
+
+.subtitle {
+  margin-top: 10px;
+  font-size: 15px;
+  opacity: .65;
+}
+
+/* 卡片 */
+.card {
+  border-radius: 28px;
+  padding: 22px;
+
+  background: rgba(255,255,255,.64);
+  border: 1px solid rgba(255,255,255,.65);
+
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+
+  box-shadow:
+    0 20px 60px rgba(50,60,100,.12);
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 25px 70px rgba(50,60,100,.18);
+}
+
+/* 日期 */
+.date {
+  text-align: center;
+  margin: 4px 0 20px;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  color: #626a82;
+}
+
+/* 图片 */
+.image-wrapper {
+  overflow: hidden;
+  border-radius: 20px;
+
+  background: rgba(0,0,0,.04);
+
+  cursor: zoom-in;
+}
+
+#homeworkImage {
+  display: block;
+  width: 100%;
+  height: auto;
+
+  min-height: 120px;
+
+  object-fit: contain;
+
+  transition: transform .35s ease;
+}
+
+#homeworkImage:hover {
+  transform: scale(1.015);
+}
+
+/* 提示 */
+.hint {
+  margin-top: 18px;
+  text-align: center;
+
+  font-size: 13px;
+  color: #7c8397;
+}
+
+/* 页脚 */
+footer {
+  margin-top: 30px;
+  text-align: center;
+
+  font-size: 12px;
+  opacity: .5;
+}
+</style>
 </head>
-
 
 <body>
 
-  <!-- Aurora 背景 -->
+<div class="aurora" id="aurora"></div>
 
-  <div class="aurora"></div>
+<main class="container">
 
+  <header>
+    <h1>
+      <span class="book-icon">📚</span>
+      班级作业
+    </h1>
 
-  <main class="container">
+    <div class="subtitle">
+      每周作业 · 一张图看完
+    </div>
+  </header>
 
-    <!-- 标题 -->
+  <section class="card">
 
-    <div class="title">
-
-      <h1>
-        <span class="book-icon">📚</span>
-        班级作业
-      </h1>
-
-      <p class="subtitle">
-        每周作业 · 点击图片查看原图
-      </p>
-
+    <div class="date" id="date">
+      正在获取作业日期……
     </div>
 
-
-    <!-- 作业 -->
-
-    <section class="card">
-
-      <!-- 日期 -->
-
-      <div
-        class="date"
-        id="date"
+    <div class="image-wrapper">
+      <img
+        id="homeworkImage"
+        src="https://raw.githubusercontent.com/cheems201/class-homework/main/homework.jpg"
+        alt="本周作业"
       >
-        正在读取作业日期……
-      </div>
+    </div>
 
+    <div class="hint">
+      点击图片可查看原图
+    </div>
 
-      <!-- 图片 -->
+  </section>
 
-      <a
-        class="image-link"
-        id="imageLink"
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+  <footer>
+    班级作业分享
+  </footer>
 
-        <img
-          id="homeworkImage"
-          class="homework-image"
-          alt="本周班级作业"
-        >
+</main>
 
-      </a>
+<script>
 
+/* =========================
+   基本信息
+========================= */
 
-      <p class="tip">
-        点击图片可以查看高清原图
-      </p>
+const USER = "cheems201";
+const REPO = "class-homework";
+const FILE = "homework.jpg";
 
-    </section>
+/*
+ * 图片不再使用 jsDelivr
+ * 直接从 GitHub Raw 获取
+ */
+const RAW_URL =
+  "https://raw.githubusercontent.com/" +
+  USER +
+  "/" +
+  REPO +
+  "/main/" +
+  FILE;
 
 
-    <footer>
-      班级作业 · 自动更新
-    </footer>
+/* =========================
+   加载作业图片
+========================= */
 
-  </main>
+function loadHomeworkImage() {
 
+  const img = document.getElementById("homeworkImage");
 
-  <script>
+  /*
+   * 加时间参数，避免浏览器一直使用旧缓存
+   */
+  img.src = RAW_URL + "?v=" + Date.now();
 
-    /* =====================================
-       GitHub 信息
-       ===================================== */
+}
 
-    const USER =
-      "cheems201";
 
-    const REPO =
-      "class-homework";
+/* =========================
+   点击图片查看原图
+========================= */
 
-    const FILE =
-      "homework.jpg";
+document
+  .getElementById("homeworkImage")
+  .addEventListener("click", function () {
 
-
-    /* =====================================
-       jsDelivr 图片地址
-       ===================================== */
-
-    const CDN_URL =
-      "https://cdn.jsdelivr.net/gh/" +
-      USER +
-      "/" +
-      REPO +
-      "@main/" +
-      FILE;
-
-
-    /* =====================================
-       加载图片
-       ===================================== */
-
-    function loadHomeworkImage() {
-
-      const image =
-        document.getElementById(
-          "homeworkImage"
-        );
-
-      const link =
-        document.getElementById(
-          "imageLink"
-        );
-
-
-      /*
-       * 加入时间参数，
-       * 防止浏览器继续使用旧缓存
-       */
-
-      const imageUrl =
-        CDN_URL +
-        "?v=" +
-        Date.now();
-
-
-      image.src =
-        imageUrl;
-
-      link.href =
-        imageUrl;
-
-    }
-
-
-    /* =====================================
-       获取作业日期
-       ===================================== */
-
-    async function getHomeworkDate() {
-
-      const dateElement =
-        document.getElementById(
-          "date"
-        );
-
-
-      const api =
-        "https://api.github.com/repos/" +
-        USER +
-        "/" +
-        REPO +
-        "/commits?path=" +
-        encodeURIComponent(FILE) +
-        "&per_page=1";
-
-
-      try {
-
-        const response =
-          await fetch(
-            api,
-            {
-              cache: "no-store",
-
-              headers: {
-                "Accept":
-                  "application/vnd.github+json"
-              }
-            }
-          );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "GitHub API HTTP " +
-            response.status
-          );
-
-        }
-
-
-        const data =
-          await response.json();
-
-
-        if (
-          !Array.isArray(data) ||
-          data.length === 0
-        ) {
-
-          throw new Error(
-            "没有找到 homework.jpg 的提交记录"
-          );
-
-        }
-
-
-        const rawDate =
-          data[0]
-            ?.commit
-            ?.author
-            ?.date;
-
-
-        if (!rawDate) {
-
-          throw new Error(
-            "GitHub 返回的数据没有日期"
-          );
-
-        }
-
-
-        const date =
-          new Date(rawDate);
-
-
-        if (
-          isNaN(
-            date.getTime()
-          )
-        ) {
-
-          throw new Error(
-            "日期格式错误"
-          );
-
-        }
-
-
-        const weekDays = [
-          "星期日",
-          "星期一",
-          "星期二",
-          "星期三",
-          "星期四",
-          "星期五",
-          "星期六"
-        ];
-
-
-        const year =
-          date.getFullYear();
-
-        const month =
-          date.getMonth() + 1;
-
-        const day =
-          date.getDate();
-
-        const weekDay =
-          weekDays[
-            date.getDay()
-          ];
-
-
-        dateElement.innerHTML =
-          "作业日期：<strong>" +
-          year +
-          "年" +
-          month +
-          "月" +
-          day +
-          "日 " +
-          weekDay +
-          "</strong>";
-
-
-      } catch (error) {
-
-        console.error(
-          "日期读取失败:",
-          error
-        );
-
-
-        dateElement.innerHTML =
-          "日期读取失败：" +
-          "<strong>" +
-          error.message +
-          "</strong>";
-
-      }
-
-    }
-
-
-    /* =====================================
-       Aurora 滚动
-       ===================================== */
-
-    let ticking = false;
-
-
-    window.addEventListener(
-      "scroll",
-
-      function () {
-
-        if (ticking) {
-          return;
-        }
-
-
-        window.requestAnimationFrame(
-          function () {
-
-            const scrollY =
-              window.scrollY || 0;
-
-
-            const offset =
-              Math.min(
-                scrollY * 0.06,
-                18
-              );
-
-
-            document.documentElement
-              .style
-              .setProperty(
-                "--scroll-offset",
-                offset + "px"
-              );
-
-
-            ticking = false;
-
-          }
-        );
-
-
-        ticking = true;
-
-      },
-
-      {
-        passive: true
-      }
+    window.open(
+      RAW_URL + "?v=" + Date.now(),
+      "_blank"
     );
 
+  });
 
-    /* =====================================
-       页面启动
-       ===================================== */
 
-    loadHomeworkImage();
+/* =========================
+   获取 homework.jpg 最近一次提交日期
+========================= */
 
-    getHomeworkDate();
+async function loadDate() {
 
-  </script>
+  const dateElement = document.getElementById("date");
+
+  const api =
+    "https://api.github.com/repos/" +
+    USER +
+    "/" +
+    REPO +
+    "/commits?path=" +
+    FILE +
+    "&per_page=1";
+
+  try {
+
+    const response = await fetch(api, {
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        "GitHub API HTTP " + response.status
+      );
+    }
+
+    const commits = await response.json();
+
+    if (!commits.length) {
+      throw new Error("没有找到作业图片的提交记录");
+    }
+
+    const commitDate =
+      commits[0].commit.author.date;
+
+    const date = new Date(commitDate);
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    const weekdays = [
+      "星期日",
+      "星期一",
+      "星期二",
+      "星期三",
+      "星期四",
+      "星期五",
+      "星期六"
+    ];
+
+    const weekday =
+      weekdays[date.getDay()];
+
+    dateElement.textContent =
+      "作业日期：" +
+      year +
+      "年" +
+      month +
+      "月" +
+      day +
+      "日 " +
+      weekday;
+
+  } catch (error) {
+
+    console.error(error);
+
+    dateElement.textContent =
+      "作业日期获取失败";
+
+  }
+
+}
+
+
+/* =========================
+   Aurora 滚动视差
+========================= */
+
+const aurora =
+  document.getElementById("aurora");
+
+window.addEventListener(
+  "scroll",
+  function () {
+
+    const y =
+      window.scrollY || 0;
+
+    const moveY =
+      Math.min(y * 0.12, 80);
+
+    const moveX =
+      Math.sin(y * 0.008) * 30;
+
+    aurora.style.setProperty(
+      "--move-y",
+      moveY + "px"
+    );
+
+    aurora.style.setProperty(
+      "--move-x",
+      moveX + "px"
+    );
+
+  },
+  {
+    passive: true
+  }
+);
+
+
+/* =========================
+   启动
+========================= */
+
+loadHomeworkImage();
+loadDate();
+
+</script>
 
 </body>
 </html>
