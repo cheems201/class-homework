@@ -4,310 +4,239 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="theme-color" content="#f5f7fb">
-
   <title>班级作业</title>
 
   <style>
-    /* ========================================
-       基础
-       ======================================== */
+    :root {
+      color-scheme: light dark;
+
+      --bg: #f5f7fb;
+      --text: #1f2937;
+      --subtext: #6b7280;
+      --card: rgba(255, 255, 255, 0.62);
+      --border: rgba(255, 255, 255, 0.75);
+      --shadow: rgba(31, 41, 55, 0.12);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1117;
+        --text: #f3f4f6;
+        --subtext: #9ca3af;
+        --card: rgba(25, 28, 38, 0.65);
+        --border: rgba(255, 255, 255, 0.10);
+        --shadow: rgba(0, 0, 0, 0.35);
+      }
+    }
 
     * {
       box-sizing: border-box;
     }
 
     html {
-      min-height: 100%;
-      color-scheme: light dark;
+      margin: 0;
+      padding: 0;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
-      overflow-x: hidden;
-
       font-family:
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
+        "PingFang SC",
         "Microsoft YaHei",
         sans-serif;
 
-      background: #f5f7fb;
-      color: #202124;
+      background: var(--bg);
+      color: var(--text);
 
-      transition:
-        background-color 0.4s ease,
-        color 0.4s ease;
+      overflow-x: hidden;
     }
 
-
-    /* ========================================
-       Aurora 光晕
-       ======================================== */
+    /* =========================
+       Aurora 背景
+       ========================= */
 
     .aurora {
       position: fixed;
-
-      /*
-       * 比屏幕大一点，
-       * 防止移动时出现空白
-       */
-      inset: -25%;
-
-      pointer-events: none;
       z-index: -1;
 
-      opacity: 0.65;
+      top: -25%;
+      left: -25%;
+      width: 150%;
+      height: 150%;
+
+      pointer-events: none;
 
       background:
         radial-gradient(
-          ellipse 38% 28% at 20% 18%,
-          rgba(99, 102, 241, 0.28),
-          transparent 70%
+          circle at 20% 25%,
+          rgba(99, 102, 241, 0.10),
+          transparent 32%
         ),
-
         radial-gradient(
-          ellipse 42% 30% at 82% 22%,
-          rgba(6, 182, 212, 0.24),
-          transparent 70%
+          circle at 80% 30%,
+          rgba(168, 85, 247, 0.08),
+          transparent 30%
         ),
-
         radial-gradient(
-          ellipse 40% 32% at 52% 82%,
-          rgba(168, 85, 247, 0.22),
-          transparent 70%
+          circle at 50% 80%,
+          rgba(59, 130, 246, 0.07),
+          transparent 35%
         );
 
       filter: blur(65px);
 
-      /*
-       * 非常轻微的持续运动
-       */
-      animation:
-        auroraFloat 18s ease-in-out infinite alternate;
-
-      /*
-       * JS 会修改这个变量
-       * 实现非常轻微的滚动视差
-       */
       transform:
-        translate3d(
-          0,
-          var(--scroll-offset, 0px),
-          0
-        );
+        translate3d(0, var(--scroll-offset, 0px), 0);
 
-      transition:
-        transform 0.5s cubic-bezier(.22,.61,.36,1),
-        opacity 0.4s ease;
+      animation: auroraFloat 18s ease-in-out infinite alternate;
     }
 
-
     @keyframes auroraFloat {
-
-      0% {
+      from {
         transform:
-          translate3d(
-            0,
-            var(--scroll-offset, 0px),
-            0
-          )
+          translate3d(0, var(--scroll-offset, 0px), 0)
           scale(1);
       }
 
-      50% {
+      to {
         transform:
-          translate3d(
-            1%,
-            calc(var(--scroll-offset, 0px) - 0.5%),
-            0
-          )
-          scale(1.025);
-      }
-
-      100% {
-        transform:
-          translate3d(
-            -1%,
-            calc(var(--scroll-offset, 0px) + 0.5%),
-            0
-          )
+          translate3d(8px, var(--scroll-offset, 0px), 0)
           scale(1.015);
       }
     }
 
+    /* =========================
+       页面主体
+       ========================= */
 
-    /* ========================================
-       顶部
-       ======================================== */
-
-    header {
-
-      width:
-        min(
-          900px,
-          calc(100% - 28px)
-        );
-
-      margin: 28px auto 0;
-
-      padding: 28px 20px;
-
-      text-align: center;
-
-      background:
-        rgba(255, 255, 255, 0.62);
-
-      border:
-        1px solid
-        rgba(255, 255, 255, 0.72);
-
-      border-radius: 26px;
-
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-
-      box-shadow:
-        0 20px 60px
-        rgba(30, 40, 80, 0.10),
-
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.85);
-
-      transition:
-        background 0.4s ease,
-        border-color 0.4s ease,
-        box-shadow 0.4s ease;
+    .container {
+      width: min(92%, 760px);
+      margin: 0 auto;
+      padding: 55px 0 60px;
     }
 
+    /* =========================
+       标题
+       ========================= */
 
-    header h1 {
+    .title {
+      text-align: center;
+      margin-bottom: 12px;
+    }
 
+    .title h1 {
       margin: 0;
 
-      font-size:
-        clamp(
-          28px,
-          6vw,
-          42px
-        );
-
-      font-weight: 700;
-
+      font-size: clamp(30px, 8vw, 48px);
+      font-weight: 800;
       letter-spacing: -1px;
 
-      background:
-        linear-gradient(
-          90deg,
-          #303b80,
-          #5968d9,
-          #159db8
-        );
+      background: linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6,
+        #ec4899
+      );
 
       -webkit-background-clip: text;
       background-clip: text;
 
       color: transparent;
+      -webkit-text-fill-color: transparent;
     }
 
+    /* 
+       单独把 Emoji 从文字渐变里拿出来，
+       防止 📚 变成和文字一样的颜色
+    */
 
-    #date {
+    .book-icon {
+      color: initial;
 
-      margin-top: 10px;
+      background: none;
+      -webkit-background-clip: initial;
+      background-clip: initial;
+
+      -webkit-text-fill-color: initial;
+
+      font-family:
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Noto Color Emoji",
+        sans-serif;
+    }
+
+    .subtitle {
+      margin: 0;
+
+      text-align: center;
 
       font-size: 14px;
-
-      color:
-        rgba(30, 35, 50, 0.58);
-
-      transition:
-        color 0.4s ease;
+      color: var(--subtext);
     }
 
-
-    /* ========================================
-       主体
-       ======================================== */
-
-    main {
-
-      width:
-        min(
-          900px,
-          calc(100% - 28px)
-        );
-
-      margin:
-        20px auto 40px;
-    }
-
+    /* =========================
+       玻璃卡片
+       ========================= */
 
     .card {
+      margin-top: 30px;
 
-      padding: 14px;
+      padding: 16px;
 
-      background:
-        rgba(255, 255, 255, 0.58);
+      border-radius: 24px;
 
-      border:
-        1px solid
-        rgba(255, 255, 255, 0.72);
+      background: var(--card);
 
-      border-radius: 26px;
-
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
 
       box-shadow:
-        0 25px 70px
-        rgba(30, 40, 80, 0.12),
+        0 20px 50px var(--shadow);
 
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.85);
-
-      transition:
-        transform 0.3s ease,
-        background 0.4s ease,
-        border-color 0.4s ease,
-        box-shadow 0.4s ease;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
+    /* =========================
+       日期
+       ========================= */
 
-    .card:hover {
+    .date {
+      text-align: center;
 
-      transform:
-        translateY(-2px);
+      margin: 4px 0 18px;
 
-      box-shadow:
-        0 30px 80px
-        rgba(30, 40, 80, 0.15),
+      color: var(--subtext);
 
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.9);
+      font-size: 14px;
     }
 
+    .date strong {
+      color: var(--text);
+      font-weight: 600;
+    }
 
-    /* ========================================
+    /* =========================
        图片
-       ======================================== */
+       ========================= */
 
-    .image-wrapper {
-
-      position: relative;
+    .image-link {
+      display: block;
 
       overflow: hidden;
 
       border-radius: 18px;
 
-      background:
-        rgba(0, 0, 0, 0.04);
+      background: rgba(128, 128, 128, 0.08);
+
+      cursor: zoom-in;
     }
 
-
-    .homework {
-
+    .homework-image {
       display: block;
 
       width: 100%;
@@ -315,432 +244,178 @@
 
       border-radius: 18px;
 
-      cursor: zoom-in;
-
       transition:
         transform 0.35s ease,
         filter 0.35s ease;
     }
 
-
-    .image-wrapper:hover
-    .homework {
-
-      transform:
-        scale(1.012);
-
-      filter:
-        brightness(1.025);
+    .image-link:hover .homework-image {
+      transform: scale(1.015);
+      filter: brightness(1.03);
     }
 
+    /* =========================
+       图片下面提示
+       ========================= */
 
-    /* ========================================
-       提示文字
-       ======================================== */
-
-    .hint {
+    .tip {
+      margin: 16px 0 2px;
 
       text-align: center;
-
-      margin-top: 14px;
 
       font-size: 13px;
 
-      color:
-        rgba(30, 35, 50, 0.42);
-
-      transition:
-        color 0.4s ease;
+      color: var(--subtext);
     }
 
+    /* =========================
+       页脚
+       ========================= */
 
-    /* ========================================
-       没有图片
-       ======================================== */
-
-    .empty {
+    footer {
+      margin-top: 26px;
 
       text-align: center;
 
-      padding: 70px 20px;
+      font-size: 12px;
 
-      color:
-        rgba(30, 35, 50, 0.52);
+      color: var(--subtext);
 
-      transition:
-        color 0.4s ease;
+      opacity: 0.75;
     }
 
-
-    .empty-icon {
-
-      font-size: 42px;
-
-      margin-bottom: 12px;
-    }
-
-
-    /* ========================================
-       深色模式
-       ======================================== */
-
-    @media (prefers-color-scheme: dark) {
-
-      body {
-
-        background:
-          #070914;
-
-        color:
-          #f5f7ff;
-      }
-
-
-      .aurora {
-
-        opacity: 0.75;
-
-        background:
-
-          radial-gradient(
-            ellipse 38% 28% at 20% 18%,
-            rgba(99, 102, 241, 0.38),
-            transparent 70%
-          ),
-
-          radial-gradient(
-            ellipse 42% 30% at 82% 22%,
-            rgba(6, 182, 212, 0.32),
-            transparent 70%
-          ),
-
-          radial-gradient(
-            ellipse 40% 32% at 52% 82%,
-            rgba(168, 85, 247, 0.32),
-            transparent 70%
-          );
-
-        filter:
-          blur(70px);
-      }
-
-
-      header {
-
-        background:
-          rgba(255, 255, 255, 0.055);
-
-        border-color:
-          rgba(255, 255, 255, 0.12);
-
-        box-shadow:
-
-          0 20px 60px
-          rgba(0, 0, 0, 0.25),
-
-          inset 0 1px 0
-          rgba(255, 255, 255, 0.10);
-      }
-
-
-      header h1 {
-
-        background:
-
-          linear-gradient(
-            90deg,
-            #ffffff,
-            #b9c6ff,
-            #8ee9ff
-          );
-
-        -webkit-background-clip: text;
-        background-clip: text;
-
-        color: transparent;
-      }
-
-
-      #date {
-
-        color:
-          rgba(255, 255, 255, 0.60);
-      }
-
-
-      .card {
-
-        background:
-          rgba(255, 255, 255, 0.065);
-
-        border-color:
-          rgba(255, 255, 255, 0.13);
-
-        box-shadow:
-
-          0 25px 70px
-          rgba(0, 0, 0, 0.30),
-
-          inset 0 1px 0
-          rgba(255, 255, 255, 0.12);
-      }
-
-
-      .card:hover {
-
-        box-shadow:
-
-          0 30px 80px
-          rgba(0, 0, 0, 0.38),
-
-          inset 0 1px 0
-          rgba(255, 255, 255, 0.15);
-      }
-
-
-      .image-wrapper {
-
-        background:
-          rgba(0, 0, 0, 0.18);
-      }
-
-
-      .hint {
-
-        color:
-          rgba(255, 255, 255, 0.42);
-      }
-
-
-      .empty {
-
-        color:
-          rgba(255, 255, 255, 0.55);
-      }
-    }
-
-
-    /* ========================================
-       手机
-       ======================================== */
+    /* =========================
+       手机优化
+       ========================= */
 
     @media (max-width: 600px) {
-
-      header {
-
-        margin-top: 14px;
-
-        padding:
-          24px 16px;
-
-        border-radius: 22px;
+      .container {
+        width: 94%;
+        padding-top: 35px;
       }
-
-
-      main {
-
-        margin-top: 14px;
-      }
-
 
       .card {
+        margin-top: 24px;
+        padding: 10px;
 
-        padding: 9px;
-
-        border-radius: 22px;
+        border-radius: 20px;
       }
 
-
-      .image-wrapper,
-      .homework {
-
-        border-radius: 16px;
+      .image-link,
+      .homework-image {
+        border-radius: 15px;
       }
 
-
-      .hint {
-
-        margin-top: 11px;
+      .title h1 {
+        font-size: 34px;
       }
     }
-
-
-    /* ========================================
-       减少动画
-       ======================================== */
-
-    @media (prefers-reduced-motion: reduce) {
-
-      .aurora {
-
-        animation: none;
-
-        transition: none;
-      }
-
-      .card,
-      .homework {
-
-        transition: none;
-      }
-    }
-
   </style>
 </head>
-
 
 <body>
 
   <!-- Aurora 背景 -->
   <div class="aurora"></div>
 
+  <main class="container">
 
-  <!-- 顶部 -->
-  <header>
+    <!-- 标题 -->
+    <div class="title">
+      <h1>
+        <span class="book-icon">📚</span>
+        班级作业
+      </h1>
 
-    <h1><span class="book-icon">📚</span> 班级作业</h1>
-
-    .book-icon {
-  color: initial;
-  -webkit-text-fill-color: initial;
-  background: none;
-  -webkit-background-clip: initial;
-  background-clip: initial;
-}
- 
-    <div id="date">
-      正在读取作业日期……
+      <p class="subtitle">
+        每周作业 · 点击图片查看原图
+      </p>
     </div>
 
-  </header>
+    <!-- 作业卡片 -->
+    <section class="card">
 
-
-  <!-- 作业 -->
-  <main>
-
-    <div class="card">
-
-      <div class="image-wrapper">
-
-        <a
-          href="homework.jpg"
-          target="_blank"
-          rel="noopener"
-        >
-
-          <img
-            class="homework"
-            src="homework.jpg"
-            alt="最新作业"
-
-            onerror="
-              this.style.display='none';
-              document.getElementById('empty').style.display='block';
-            "
-          >
-
-        </a>
-
-
-        <div
-          id="empty"
-          class="empty"
-          style="display:none;"
-        >
-
-          <div class="empty-icon">
-            📭
-          </div>
-
-          暂时还没有上传作业图片
-
-        </div>
-
+      <!-- 日期 -->
+      <div class="date" id="date">
+        正在读取作业日期……
       </div>
 
+      <!-- 作业图片 -->
+      <a
+        class="image-link"
+        href="homework.jpg"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          id="homeworkImage"
+          class="homework-image"
+          src="homework.jpg"
+          alt="本周班级作业"
+        >
+      </a>
 
-      <div class="hint">
-        点击图片查看原图
-      </div>
+      <p class="tip">
+        点击图片可以查看高清原图
+      </p>
 
-    </div>
+    </section>
+
+    <footer>
+      班级作业 · 自动更新
+    </footer>
 
   </main>
 
-
   <script>
+    /* =====================================
+       GitHub 仓库信息
+       ===================================== */
 
-    /* ========================================
-       GitHub 设置
-       ======================================== */
-
-    const owner = "cheems201";
-
-    const repo = "class-homework";
-
-    const file = "homework.jpg";
+    const GITHUB_USER = "cheems201";
+    const GITHUB_REPO = "class-homework";
+    const IMAGE_FILE = "homework.jpg";
 
 
-    /* ========================================
-       获取作业上传日期
-       ======================================== */
+    /* =====================================
+       自动读取 homework.jpg 最近一次提交日期
+       ===================================== */
 
-    async function getHomeworkDate() {
+    async function loadHomeworkDate() {
+
+      const dateElement = document.getElementById("date");
+
+      const apiUrl =
+        `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/commits` +
+        `?path=${encodeURIComponent(IMAGE_FILE)}&per_page=1`;
 
       try {
 
-        const api =
-          `https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(file)}&per_page=1`;
-
-
-        const response =
-          await fetch(api);
-
+        const response = await fetch(apiUrl, {
+          cache: "no-store"
+        });
 
         if (!response.ok) {
-
-          throw new Error(
-            "GitHub API 请求失败"
-          );
-
+          throw new Error("GitHub API 请求失败");
         }
 
+        const commits = await response.json();
 
-        const data =
-          await response.json();
-
-
-        if (!data.length) {
-
-          document.getElementById(
-            "date"
-          ).textContent =
-            "暂时没有上传记录";
-
-          return;
+        if (!Array.isArray(commits) || commits.length === 0) {
+          throw new Error("没有找到图片提交记录");
         }
 
+        const commitDate =
+          commits[0].commit.author.date ||
+          commits[0].commit.committer.date;
 
-        const date =
-          new Date(
-            data[0].commit.author.date
-          );
+        const date = new Date(commitDate);
 
+        if (isNaN(date.getTime())) {
+          throw new Error("日期格式错误");
+        }
 
-        const year =
-          date.getFullYear();
-
-
-        const month =
-          date.getMonth() + 1;
-
-
-        const day =
-          date.getDate();
-
-
-        const weekdays = [
-
+        const weekDays = [
           "星期日",
           "星期一",
           "星期二",
@@ -748,79 +423,76 @@
           "星期四",
           "星期五",
           "星期六"
-
         ];
 
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const weekDay = weekDays[date.getDay()];
 
-        document.getElementById(
-          "date"
-        ).textContent =
+        dateElement.innerHTML =
+          `作业日期：<strong>${year}年${month}月${day}日 ${weekDay}</strong>`;
 
-          `作业日期：${year}年${month}月${day}日 ${weekdays[date.getDay()]}`;
+      } catch (error) {
 
+        console.error("读取作业日期失败：", error);
+
+        dateElement.textContent =
+          "作业日期暂时无法读取";
       }
-
-      catch (error) {
-
-        console.error(error);
-
-        document.getElementById(
-          "date"
-        ).textContent =
-          "作业日期读取失败";
-
-      }
-
     }
 
 
-    getHomeworkDate();
+    /* =====================================
+       防止 GitHub Pages 缓存旧图片
+       ===================================== */
+
+    function refreshHomeworkImage() {
+
+      const image =
+        document.getElementById("homeworkImage");
+
+      const imageLink =
+        document.querySelector(".image-link");
+
+      const cacheBuster =
+        Date.now();
+
+      const newImageUrl =
+        `homework.jpg?v=${cacheBuster}`;
+
+      image.src = newImageUrl;
+
+      imageLink.href = newImageUrl;
+    }
 
 
-    /* ========================================
-       Aurora 滚动视差
-       
-       非常轻微：
-       最多只移动约 18px
-       ======================================== */
-
-    const aurora =
-      document.querySelector(".aurora");
-
+    /* =====================================
+       Aurora 随页面滚动轻微移动
+       ===================================== */
 
     let ticking = false;
 
-
     function updateAurora() {
 
-      const scrollY =
-        window.scrollY || 0;
-
+      const scrollY = window.scrollY || 0;
 
       /*
-       * 限制最大移动范围
-       * 防止光晕移动太明显
-       */
+        控制移动幅度非常小，
+        最大大约只有十几像素
+      */
 
       const offset =
-        Math.max(
-          -18,
-          Math.min(
-            18,
-            scrollY * -0.025
-          )
+        Math.min(scrollY * 0.06, 18);
+
+      document.documentElement.style
+        .setProperty(
+          "--scroll-offset",
+          `${offset}px`
         );
-
-
-      aurora.style.setProperty(
-        "--scroll-offset",
-        `${offset}px`
-      );
-
 
       ticking = false;
     }
-
 
     window.addEventListener(
       "scroll",
@@ -840,7 +512,12 @@
     );
 
 
-    updateAurora();
+    /* =====================================
+       页面加载
+       ===================================== */
+
+    loadHomeworkDate();
+    refreshHomeworkImage();
 
   </script>
 
