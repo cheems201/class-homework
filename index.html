@@ -4,17 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="theme-color" content="#080b18">
+  <meta name="theme-color" content="#f5f7fb">
 
   <title>班级作业</title>
 
   <style>
+    /* ========================================
+       基础
+       ======================================== */
+
     * {
       box-sizing: border-box;
     }
 
     html {
       min-height: 100%;
+      color-scheme: light dark;
     }
 
     body {
@@ -29,89 +34,135 @@
         "Microsoft YaHei",
         sans-serif;
 
-      color: white;
+      background: #f5f7fb;
+      color: #202124;
 
-      background:
-        radial-gradient(
-          circle at 15% 15%,
-          rgba(99, 102, 241, 0.18),
-          transparent 35%
-        ),
-        radial-gradient(
-          circle at 85% 20%,
-          rgba(6, 182, 212, 0.16),
-          transparent 35%
-        ),
-        radial-gradient(
-          circle at 50% 100%,
-          rgba(168, 85, 247, 0.16),
-          transparent 40%
-        ),
-        #070914;
+      transition:
+        background-color 0.4s ease,
+        color 0.4s ease;
     }
 
-    /* =========================
+
+    /* ========================================
        Aurora 光晕
-       ========================= */
+       ======================================== */
 
     .aurora {
       position: fixed;
+
+      /*
+       * 比屏幕大一点，
+       * 防止移动时出现空白
+       */
       inset: -25%;
+
       pointer-events: none;
       z-index: -1;
 
+      opacity: 0.65;
+
       background:
         radial-gradient(
-          ellipse 40% 30% at 20% 20%,
-          rgba(99, 102, 241, 0.45),
+          ellipse 38% 28% at 20% 18%,
+          rgba(99, 102, 241, 0.28),
           transparent 70%
         ),
+
         radial-gradient(
-          ellipse 45% 35% at 80% 30%,
-          rgba(6, 182, 212, 0.38),
+          ellipse 42% 30% at 82% 22%,
+          rgba(6, 182, 212, 0.24),
           transparent 70%
         ),
+
         radial-gradient(
-          ellipse 40% 35% at 50% 80%,
-          rgba(168, 85, 247, 0.38),
+          ellipse 40% 32% at 52% 82%,
+          rgba(168, 85, 247, 0.22),
           transparent 70%
         );
 
-      filter: blur(70px);
+      filter: blur(65px);
 
+      /*
+       * 非常轻微的持续运动
+       */
       animation:
-        auroraMove 18s ease-in-out infinite alternate;
+        auroraFloat 18s ease-in-out infinite alternate;
+
+      /*
+       * JS 会修改这个变量
+       * 实现非常轻微的滚动视差
+       */
+      transform:
+        translate3d(
+          0,
+          var(--scroll-offset, 0px),
+          0
+        );
+
+      transition:
+        transform 0.5s cubic-bezier(.22,.61,.36,1),
+        opacity 0.4s ease;
     }
 
-    @keyframes auroraMove {
+
+    @keyframes auroraFloat {
+
       0% {
-        transform: translate(-2%, -2%) scale(1);
+        transform:
+          translate3d(
+            0,
+            var(--scroll-offset, 0px),
+            0
+          )
+          scale(1);
       }
 
       50% {
-        transform: translate(3%, -1%) scale(1.05);
+        transform:
+          translate3d(
+            1%,
+            calc(var(--scroll-offset, 0px) - 0.5%),
+            0
+          )
+          scale(1.025);
       }
 
       100% {
-        transform: translate(-1%, 3%) scale(1.02);
+        transform:
+          translate3d(
+            -1%,
+            calc(var(--scroll-offset, 0px) + 0.5%),
+            0
+          )
+          scale(1.015);
       }
     }
 
-    /* =========================
+
+    /* ========================================
        顶部
-       ========================= */
+       ======================================== */
 
     header {
-      width: min(900px, calc(100% - 28px));
+
+      width:
+        min(
+          900px,
+          calc(100% - 28px)
+        );
+
       margin: 28px auto 0;
 
       padding: 28px 20px;
 
       text-align: center;
 
-      background: rgba(255, 255, 255, 0.055);
+      background:
+        rgba(255, 255, 255, 0.62);
 
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border:
+        1px solid
+        rgba(255, 255, 255, 0.72);
 
       border-radius: 26px;
 
@@ -119,54 +170,90 @@
       -webkit-backdrop-filter: blur(22px);
 
       box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        0 20px 60px
+        rgba(30, 40, 80, 0.10),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.85);
+
+      transition:
+        background 0.4s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
     }
 
+
     header h1 {
+
       margin: 0;
 
-      font-size: clamp(28px, 6vw, 42px);
+      font-size:
+        clamp(
+          28px,
+          6vw,
+          42px
+        );
+
       font-weight: 700;
+
       letter-spacing: -1px;
 
       background:
         linear-gradient(
           90deg,
-          #ffffff,
-          #b9c6ff,
-          #8ee9ff
+          #303b80,
+          #5968d9,
+          #159db8
         );
 
       -webkit-background-clip: text;
       background-clip: text;
+
       color: transparent;
     }
 
+
     #date {
+
       margin-top: 10px;
 
       font-size: 14px;
 
-      color: rgba(255, 255, 255, 0.62);
+      color:
+        rgba(30, 35, 50, 0.58);
+
+      transition:
+        color 0.4s ease;
     }
 
-    /* =========================
+
+    /* ========================================
        主体
-       ========================= */
+       ======================================== */
 
     main {
-      width: min(900px, calc(100% - 28px));
 
-      margin: 20px auto 40px;
+      width:
+        min(
+          900px,
+          calc(100% - 28px)
+        );
+
+      margin:
+        20px auto 40px;
     }
 
+
     .card {
+
       padding: 14px;
 
-      background: rgba(255, 255, 255, 0.065);
+      background:
+        rgba(255, 255, 255, 0.58);
 
-      border: 1px solid rgba(255, 255, 255, 0.13);
+      border:
+        1px solid
+        rgba(255, 255, 255, 0.72);
 
       border-radius: 26px;
 
@@ -174,37 +261,53 @@
       -webkit-backdrop-filter: blur(24px);
 
       box-shadow:
-        0 25px 70px rgba(0, 0, 0, 0.30),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        0 25px 70px
+        rgba(30, 40, 80, 0.12),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.85);
 
       transition:
         transform 0.3s ease,
-        box-shadow 0.3s ease;
+        background 0.4s ease,
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
     }
+
 
     .card:hover {
-      transform: translateY(-2px);
+
+      transform:
+        translateY(-2px);
 
       box-shadow:
-        0 30px 80px rgba(0, 0, 0, 0.38),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        0 30px 80px
+        rgba(30, 40, 80, 0.15),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.9);
     }
 
-    /* =========================
-       作业图片
-       ========================= */
+
+    /* ========================================
+       图片
+       ======================================== */
 
     .image-wrapper {
+
       position: relative;
 
       overflow: hidden;
 
       border-radius: 18px;
 
-      background: rgba(0, 0, 0, 0.18);
+      background:
+        rgba(0, 0, 0, 0.04);
     }
 
+
     .homework {
+
       display: block;
 
       width: 100%;
@@ -219,118 +322,311 @@
         filter 0.35s ease;
     }
 
-    .image-wrapper:hover .homework {
-      transform: scale(1.012);
-      filter: brightness(1.04);
+
+    .image-wrapper:hover
+    .homework {
+
+      transform:
+        scale(1.012);
+
+      filter:
+        brightness(1.025);
     }
 
-    /* =========================
-       底部提示
-       ========================= */
+
+    /* ========================================
+       提示文字
+       ======================================== */
 
     .hint {
+
       text-align: center;
 
       margin-top: 14px;
 
       font-size: 13px;
 
-      color: rgba(255, 255, 255, 0.42);
+      color:
+        rgba(30, 35, 50, 0.42);
+
+      transition:
+        color 0.4s ease;
     }
 
-    /* =========================
+
+    /* ========================================
        没有图片
-       ========================= */
+       ======================================== */
 
     .empty {
+
       text-align: center;
 
       padding: 70px 20px;
 
-      color: rgba(255, 255, 255, 0.55);
+      color:
+        rgba(30, 35, 50, 0.52);
+
+      transition:
+        color 0.4s ease;
     }
 
+
     .empty-icon {
+
       font-size: 42px;
 
       margin-bottom: 12px;
     }
 
-    /* =========================
-       手机优化
-       ========================= */
+
+    /* ========================================
+       深色模式
+       ======================================== */
+
+    @media (prefers-color-scheme: dark) {
+
+      body {
+
+        background:
+          #070914;
+
+        color:
+          #f5f7ff;
+      }
+
+
+      .aurora {
+
+        opacity: 0.75;
+
+        background:
+
+          radial-gradient(
+            ellipse 38% 28% at 20% 18%,
+            rgba(99, 102, 241, 0.38),
+            transparent 70%
+          ),
+
+          radial-gradient(
+            ellipse 42% 30% at 82% 22%,
+            rgba(6, 182, 212, 0.32),
+            transparent 70%
+          ),
+
+          radial-gradient(
+            ellipse 40% 32% at 52% 82%,
+            rgba(168, 85, 247, 0.32),
+            transparent 70%
+          );
+
+        filter:
+          blur(70px);
+      }
+
+
+      header {
+
+        background:
+          rgba(255, 255, 255, 0.055);
+
+        border-color:
+          rgba(255, 255, 255, 0.12);
+
+        box-shadow:
+
+          0 20px 60px
+          rgba(0, 0, 0, 0.25),
+
+          inset 0 1px 0
+          rgba(255, 255, 255, 0.10);
+      }
+
+
+      header h1 {
+
+        background:
+
+          linear-gradient(
+            90deg,
+            #ffffff,
+            #b9c6ff,
+            #8ee9ff
+          );
+
+        -webkit-background-clip: text;
+        background-clip: text;
+
+        color: transparent;
+      }
+
+
+      #date {
+
+        color:
+          rgba(255, 255, 255, 0.60);
+      }
+
+
+      .card {
+
+        background:
+          rgba(255, 255, 255, 0.065);
+
+        border-color:
+          rgba(255, 255, 255, 0.13);
+
+        box-shadow:
+
+          0 25px 70px
+          rgba(0, 0, 0, 0.30),
+
+          inset 0 1px 0
+          rgba(255, 255, 255, 0.12);
+      }
+
+
+      .card:hover {
+
+        box-shadow:
+
+          0 30px 80px
+          rgba(0, 0, 0, 0.38),
+
+          inset 0 1px 0
+          rgba(255, 255, 255, 0.15);
+      }
+
+
+      .image-wrapper {
+
+        background:
+          rgba(0, 0, 0, 0.18);
+      }
+
+
+      .hint {
+
+        color:
+          rgba(255, 255, 255, 0.42);
+      }
+
+
+      .empty {
+
+        color:
+          rgba(255, 255, 255, 0.55);
+      }
+    }
+
+
+    /* ========================================
+       手机
+       ======================================== */
 
     @media (max-width: 600px) {
 
       header {
+
         margin-top: 14px;
-        padding: 24px 16px;
+
+        padding:
+          24px 16px;
 
         border-radius: 22px;
       }
 
+
       main {
+
         margin-top: 14px;
       }
 
+
       .card {
+
         padding: 9px;
 
         border-radius: 22px;
       }
 
+
       .image-wrapper,
       .homework {
+
         border-radius: 16px;
       }
 
+
       .hint {
+
         margin-top: 11px;
       }
     }
 
-    /* =========================
+
+    /* ========================================
        减少动画
-       ========================= */
+       ======================================== */
 
     @media (prefers-reduced-motion: reduce) {
 
       .aurora {
+
         animation: none;
+
+        transition: none;
       }
 
       .card,
       .homework {
+
         transition: none;
       }
     }
+
   </style>
 </head>
+
 
 <body>
 
   <!-- Aurora 背景 -->
   <div class="aurora"></div>
 
+
   <!-- 顶部 -->
   <header>
 
-    <h1>📚 班级作业</h1>
+    <h1><span class="book-icon">📚</span> 班级作业</h1>
 
+    .book-icon {
+  color: initial;
+  -webkit-text-fill-color: initial;
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+}
+ 
     <div id="date">
       正在读取作业日期……
     </div>
 
   </header>
 
-  <!-- 内容 -->
+
+  <!-- 作业 -->
   <main>
 
     <div class="card">
 
       <div class="image-wrapper">
 
-        <a href="homework.jpg" target="_blank">
+        <a
+          href="homework.jpg"
+          target="_blank"
+          rel="noopener"
+        >
 
           <img
             class="homework"
@@ -345,19 +641,23 @@
 
         </a>
 
+
         <div
           id="empty"
           class="empty"
           style="display:none;"
         >
 
-          <div class="empty-icon">📭</div>
+          <div class="empty-icon">
+            📭
+          </div>
 
           暂时还没有上传作业图片
 
         </div>
 
       </div>
+
 
       <div class="hint">
         点击图片查看原图
@@ -367,21 +667,23 @@
 
   </main>
 
+
   <script>
 
-    /*
-     * GitHub 信息
-     */
+    /* ========================================
+       GitHub 设置
+       ======================================== */
 
     const owner = "cheems201";
+
     const repo = "class-homework";
+
     const file = "homework.jpg";
 
 
-    /*
-     * 自动获取 homework.jpg
-     * 最近一次提交日期
-     */
+    /* ========================================
+       获取作业上传日期
+       ======================================== */
 
     async function getHomeworkDate() {
 
@@ -390,40 +692,55 @@
         const api =
           `https://api.github.com/repos/${owner}/${repo}/commits?path=${encodeURIComponent(file)}&per_page=1`;
 
-        const response = await fetch(api);
+
+        const response =
+          await fetch(api);
+
 
         if (!response.ok) {
-          throw new Error("GitHub API 请求失败");
+
+          throw new Error(
+            "GitHub API 请求失败"
+          );
+
         }
 
-        const data = await response.json();
+
+        const data =
+          await response.json();
+
 
         if (!data.length) {
 
-          document.getElementById("date").textContent =
+          document.getElementById(
+            "date"
+          ).textContent =
             "暂时没有上传记录";
 
           return;
         }
 
-        const date = new Date(
-          data[0].commit.author.date
-        );
 
-        /*
-         * GitHub 返回 UTC 时间
-         * 转换成用户所在设备的本地时间
-         */
+        const date =
+          new Date(
+            data[0].commit.author.date
+          );
 
-        const year = date.getFullYear();
+
+        const year =
+          date.getFullYear();
+
 
         const month =
           date.getMonth() + 1;
 
+
         const day =
           date.getDate();
 
+
         const weekdays = [
+
           "星期日",
           "星期一",
           "星期二",
@@ -431,23 +748,99 @@
           "星期四",
           "星期五",
           "星期六"
+
         ];
 
-        document.getElementById("date").textContent =
+
+        document.getElementById(
+          "date"
+        ).textContent =
+
           `作业日期：${year}年${month}月${day}日 ${weekdays[date.getDay()]}`;
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         console.error(error);
 
-        document.getElementById("date").textContent =
+        document.getElementById(
+          "date"
+        ).textContent =
           "作业日期读取失败";
 
       }
 
     }
 
+
     getHomeworkDate();
+
+
+    /* ========================================
+       Aurora 滚动视差
+       
+       非常轻微：
+       最多只移动约 18px
+       ======================================== */
+
+    const aurora =
+      document.querySelector(".aurora");
+
+
+    let ticking = false;
+
+
+    function updateAurora() {
+
+      const scrollY =
+        window.scrollY || 0;
+
+
+      /*
+       * 限制最大移动范围
+       * 防止光晕移动太明显
+       */
+
+      const offset =
+        Math.max(
+          -18,
+          Math.min(
+            18,
+            scrollY * -0.025
+          )
+        );
+
+
+      aurora.style.setProperty(
+        "--scroll-offset",
+        `${offset}px`
+      );
+
+
+      ticking = false;
+    }
+
+
+    window.addEventListener(
+      "scroll",
+      () => {
+
+        if (!ticking) {
+
+          window.requestAnimationFrame(
+            updateAurora
+          );
+
+          ticking = true;
+        }
+
+      },
+      { passive: true }
+    );
+
+
+    updateAurora();
 
   </script>
 
